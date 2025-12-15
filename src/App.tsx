@@ -1,0 +1,119 @@
+import { useState } from "react";
+import { Hero } from "./components/Hero";
+import { BriefForm } from "./components/BriefForm";
+import { LoadingState } from "./components/LoadingState";
+import { DeckEditor } from "./components/DeckEditor";
+import { Brief, Deck } from "./lib/types";
+import { generateDeck } from "./lib/mockAI";
+import { exportDeck } from "./lib/pptxGenerator";
+import { Toaster } from "./components/ui/sonner";
+import { toast } from "sonner";
+import { useAlert } from "./components/GlobalAlertProvider";
+
+type Step = "landing" | "brief" | "generating" | "editor";
+
+export default function App() {
+  const [step, setStep] = useState<Step>("landing");
+  const { showAlert } = useAlert();
+  const [brief, setBrief] = useState<Brief | null>(null);
+  const [versions, setVersions] = useState<Deck[]>([]);
+  const [currentDeckId, setCurrentDeckId] = useState<string | null>(null);
+
+  const currentDeck = versions.find(d => d.id === currentDeckId) || null;
+
+  const handleStart = () => {
+    setStep("brief");
+  };
+
+  const handleBriefSubmit = async (submittedBrief: Brief) => {
+    setBrief(submittedBrief);
+    setStep("generating");
+
+    try {
+      const generatedDeck = await generateDeck(submittedBrief);
+      // Initialize versions with this first generation
+      setVersions([generatedDeck]);
+      setCurrentDeckId(generatedDeck.id);
+      setStep("editor");
+    } catch (error) {
+      console.error("Failed to generate deck", error);
+      toast.error("Failed to generate deck. Please try again.");
+      setStep("brief");
+    }
+  };
+
+  const handleUpdateDeck = (updatedDeck: Deck) => {
+    setVersions(prev => prev.map(d => d.id === updatedDeck.id ? updatedDeck : d));
+  };
+
+  const handleSaveVersion = () => {
+    if (!currentDeck) return;
+    // Create a clone as a new version
+    const newVersion: Deck = {
+      ...currentDeck,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      // Deep copy slides to ensure independence
+      slides: currentDeck.slides.map(s => ({ ...s, bullets: [...s.bullets] }))
+    };
+
+    setVersions(prev => [...prev, newVersion]);
+    setCurrentDeckId(newVersion.id);
+    toast.success("New version saved!");
+  };
+
+  const handleExport = async () => {
+    if (!currentDeck) return;
+
+    const promise = exportDeck(currentDeck);
+
+    toast.promise(promise, {
+      loading: 'Preparing PowerPoint file...',
+      success: 'Deck downloaded successfully!',
+      error: 'Failed to export deck.',
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-background font-sans text-foreground antialiased selection:bg-blue-500/30">
+      {step === "landing" && (
+        <Hero onStart={handleStart} />
+      )}
+
+      {step === "brief" && (
+        <BriefForm
+          onBack={() => setStep("landing")}
+          onSubmit={handleBriefSubmit}
+          isLoading={false}
+          initialBrief={brief}
+        />
+      )}
+
+      {step === "generating" && (
+        <LoadingState />
+      )}
+
+      {step === "editor" && currentDeck && (
+        <DeckEditor
+          deck={currentDeck}
+          versions={versions}
+          onSwitchVersion={setCurrentDeckId}
+          onSaveVersion={handleSaveVersion}
+          onUpdateDeck={handleUpdateDeck}
+          onExport={handleExport}
+          onBack={() => {
+            showAlert({
+              title: "Are you sure?",
+              description: "Unsaved changes will be lost.",
+              confirmText: "Leave",
+              cancelText: "Stay",
+              onConfirm: () => setStep("brief"),
+            });
+          }}
+        />
+      )}
+
+      <Toaster position="bottom-right" theme="dark" />
+    </div>
+  );
+}
