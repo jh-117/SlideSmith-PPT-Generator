@@ -4,6 +4,7 @@ import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { RefreshCw, Image as ImageIcon } from "lucide-react";
+import { toast } from "sonner";
 
 interface SlideEditorPanelProps {
   slide: Slide;
@@ -11,7 +12,7 @@ interface SlideEditorPanelProps {
 }
 
 export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
-  
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onUpdate({ ...slide, title: e.target.value });
   };
@@ -42,47 +43,47 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
 
       <div className="space-y-3">
         <Label htmlFor="slide-title">Title</Label>
-        <Input 
-          id="slide-title" 
-          value={slide.title} 
-          onChange={handleTitleChange} 
+        <Input
+          id="slide-title"
+          value={slide.title}
+          onChange={handleTitleChange}
           className="bg-slate-950 border-slate-700"
         />
       </div>
 
       <div className="space-y-3">
         <Label htmlFor="slide-bullets">Bullet Points (one per line)</Label>
-        <Textarea 
-          id="slide-bullets" 
-          value={slide.bullets.join('\n')} 
-          onChange={handleBulletsChange} 
+        <Textarea
+          id="slide-bullets"
+          value={slide.bullets.join('\n')}
+          onChange={handleBulletsChange}
           className="min-h-[150px] bg-slate-950 border-slate-700 font-mono text-sm"
         />
       </div>
 
       <div className="space-y-3">
         <Label htmlFor="slide-notes">Speaker Notes</Label>
-        <Textarea 
-          id="slide-notes" 
-          value={slide.notes} 
-          onChange={handleNotesChange} 
+        <Textarea
+          id="slide-notes"
+          value={slide.notes}
+          onChange={handleNotesChange}
           className="min-h-[100px] bg-slate-950 border-slate-700 text-slate-400 italic"
         />
       </div>
 
       <div className="pt-4 border-t border-slate-800 space-y-2">
         <Label>Actions</Label>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="w-full justify-start text-slate-400 hover:text-white border-slate-700 hover:bg-slate-800"
-          onClick={() => alert("Image regeneration mocked.")}
+          onClick={() => toast.info("Image regeneration is a mock feature")}
         >
           <ImageIcon className="mr-2 h-4 w-4" /> Change Visual
         </Button>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="w-full justify-start text-slate-400 hover:text-white border-slate-700 hover:bg-slate-800"
-          onClick={() => alert("Text regeneration mocked.")}
+          onClick={() => toast.info("Text regeneration is a mock feature")}
         >
           <RefreshCw className="mr-2 h-4 w-4" /> Regenerate Text
         </Button>

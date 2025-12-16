@@ -3,14 +3,14 @@ import { Deck } from "./types";
 
 export const exportDeck = async (deck: Deck) => {
   const pptx = new PptxGenJS();
-  
+
   // Set Layout
   pptx.layout = "LAYOUT_16x9";
-  
+
   // Set Meta
   pptx.title = deck.topic;
   pptx.subject = `Presentation for ${deck.audience}`;
-  
+
   // Define Master Slide (Dark Theme)
   pptx.defineSlideMaster({
     title: "MASTER_DARK",
@@ -25,7 +25,7 @@ export const exportDeck = async (deck: Deck) => {
   // Generate Slides
   deck.slides.forEach((slide) => {
     const s = pptx.addSlide({ masterName: "MASTER_DARK" });
-    
+
     // Title
     s.addText(slide.title, {
       x: 0.5, y: 0.5, w: "90%", h: 1,
@@ -36,15 +36,25 @@ export const exportDeck = async (deck: Deck) => {
       align: "left"
     });
 
-    // Bullets
-    s.addText(slide.bullets.map(b => ({ text: b, options: { breakLine: true } })), {
+    // Bullets - each bullet as a separate paragraph with proper spacing
+    const bulletTextProps = slide.bullets.map(b => ({
+      text: b,
+      options: {
+        bullet: { type: "bullet" as const },
+        breakLine: true, // Force new line for each bullet
+        paraSpaceAfter: 8,  // Space after each paragraph (in points)
+        paraSpaceBefore: 0,
+      }
+    }));
+
+    s.addText(bulletTextProps, {
       x: 0.5, y: 1.8, w: 5, h: 3,
       fontSize: 18,
       fontFace: "Arial",
       color: "E2E8F0",
-      bullet: true,
       align: "left",
-      valign: "top"
+      valign: "top",
+      lineSpacingMultiple: 1.5,  // 1.5x line spacing within each bullet
     });
 
     // Image

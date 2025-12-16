@@ -8,13 +8,11 @@ import { generateDeck } from "./lib/mockAI";
 import { exportDeck } from "./lib/pptxGenerator";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
-import { useAlert } from "./components/GlobalAlertProvider";
 
 type Step = "landing" | "brief" | "generating" | "editor";
 
 export default function App() {
   const [step, setStep] = useState<Step>("landing");
-  const { showAlert } = useAlert();
   const [brief, setBrief] = useState<Brief | null>(null);
   const [versions, setVersions] = useState<Deck[]>([]);
   const [currentDeckId, setCurrentDeckId] = useState<string | null>(null);
@@ -102,12 +100,16 @@ export default function App() {
           onUpdateDeck={handleUpdateDeck}
           onExport={handleExport}
           onBack={() => {
-            showAlert({
-              title: "Are you sure?",
-              description: "Unsaved changes will be lost.",
-              confirmText: "Leave",
-              cancelText: "Stay",
-              onConfirm: () => setStep("brief"),
+            toast.warning("Unsaved changes will be lost", {
+              action: {
+                label: "Leave",
+                onClick: () => setStep("brief"),
+              },
+              cancel: {
+                label: "Stay",
+                onClick: () => { },
+              },
+              duration: 10000,
             });
           }}
         />
