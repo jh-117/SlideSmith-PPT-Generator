@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
-const UNSPLASH_ACCESS_KEY = "fZGZ5q-hGH9_PGU3k7vVeJd3NMQIiJXz_fOGH-_bZRw";
+const UNSPLASH_ACCESS_KEY = Deno.env.get("UNSPLASH_ACCESS_KEY");
 
 interface Brief {
   topic: string;
@@ -24,16 +24,47 @@ interface Slide {
   notes: string;
   imageKeyword: string;
   imageUrl?: string;
+  imageAttribution?: {
+    photographerName: string;
+    photographerUrl: string;
+    unsplashUrl: string;
+  };
 }
 
 interface UnsplashImage {
   urls: {
     regular: string;
   };
+  user: {
+    name: string;
+    username: string;
+    links: {
+      html: string;
+    };
+  };
+  links: {
+    html: string;
+  };
 }
 
-const fetchUnsplashImage = async (keyword: string): Promise<string> => {
+interface ImageData {
+  url: string;
+  attribution: {
+    photographerName: string;
+    photographerUrl: string;
+    unsplashUrl: string;
+  };
+}
+
+const fetchUnsplashImage = async (keyword: string): Promise<ImageData | null> => {
   try {
+    if (!UNSPLASH_ACCESS_KEY) {
+      console.error("Unsplash API key not configured");
+      return null;
+    }
+
+    console.log(`Fetching image for keyword: "${keyword}"`);
+
     const response = await fetch(
       `https://api.unsplash.com/search/photos?query=${encodeURIComponent(keyword)}&per_page=1&orientation=landscape`,
       {
@@ -43,19 +74,41 @@ const fetchUnsplashImage = async (keyword: string): Promise<string> => {
       }
     );
 
+    console.log(`Unsplash API status for "${keyword}":`, response.status);
+
     if (!response.ok) {
-      throw new Error("Failed to fetch image");
+      const errorData = await response.json();
+      console.error("Unsplash API error:", errorData);
+      return null;
     }
 
     const data = await response.json();
+    
     if (data.results && data.results.length > 0) {
-      return (data.results[0] as UnsplashImage).urls.regular;
+      const image = data.results[0] as UnsplashImage;
+      const imageUrl = image.urls.regular;
+      
+      console.log(`Image found for "${keyword}":`, imageUrl);
+      
+      // Add UTM parameters for Unsplash API guidelines
+      const photographerUrl = `${image.user.links.html}?utm_source=your_app_name&utm_medium=referral`;
+      const unsplashUrl = `${image.links.html}?utm_source=your_app_name&utm_medium=referral`;
+      
+      return {
+        url: imageUrl,
+        attribution: {
+          photographerName: image.user.name,
+          photographerUrl: photographerUrl,
+          unsplashUrl: unsplashUrl,
+        },
+      };
     }
 
-    return "";
+    console.log(`No images found for keyword: "${keyword}"`);
+    return null;
   } catch (error) {
     console.error("Error fetching Unsplash image:", error);
-    return "";
+    return null;
   }
 };
 
@@ -70,6 +123,10 @@ Deno.serve(async (req: Request) => {
   try {
     if (!OPENAI_API_KEY) {
       throw new Error("OpenAI API key is not configured");
+    }
+
+    if (!UNSPLASH_ACCESS_KEY) {
+      console.warn("Unsplash API key is not configured - images will be skipped");
     }
 
     const brief: Brief = await req.json();
@@ -107,6 +164,8 @@ Return ONLY valid JSON in this exact format:
   ]
 }`;
 
+    console.log("Calling OpenAI API...");
+
     const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -139,16 +198,21 @@ Return ONLY valid JSON in this exact format:
     const content = data.choices[0].message.content;
     const parsedContent = JSON.parse(content);
 
+    console.log("Generated slides, fetching images...");
+
     const slidesWithImages = await Promise.all(
-      parsedContent.slides.map(async (slide: any) => {
-        const imageUrl = await fetchUnsplashImage(slide.imageKeyword);
+      parsedContent.slides.map(async (slide: any, index: number) => {
+        console.log(`Processing slide ${index + 1}: ${slide.title}`);
+        const imageData = await fetchUnsplashImage(slide.imageKeyword);
+        
         return {
           id: crypto.randomUUID(),
           title: slide.title,
           bullets: slide.bullets,
           notes: slide.notes,
           imageKeyword: slide.imageKeyword,
-          imageUrl: imageUrl || undefined,
+          imageUrl: imageData?.url || undefined,
+          imageAttribution: imageData?.attribution || undefined,
         };
       })
     );
@@ -160,6 +224,8 @@ Return ONLY valid JSON in this exact format:
       createdAt: new Date().toISOString(),
       slides: slidesWithImages,
     };
+
+    console.log("Presentation generated successfully");
 
     return new Response(JSON.stringify(deck), {
       headers: {
