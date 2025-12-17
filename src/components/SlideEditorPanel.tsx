@@ -15,6 +15,7 @@ interface SlideEditorPanelProps {
 export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
   const [imageKeyword, setImageKeyword] = useState(slide.imageKeyword);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [isRegeneratingText, setIsRegeneratingText] = useState(false);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onUpdate({ ...slide, title: e.target.value });
@@ -37,44 +38,72 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
 
     setIsLoadingImage(true);
     try {
-      const response = await fetch(
-        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(imageKeyword)}&per_page=1&orientation=landscape`,
-        {
-          headers: {
-            Authorization: `Client-ID fZGZ5q-hGH9_PGU3k7vVeJd3NMQIiJXz_fOGH-_bZRw`,
-          },
-        }
-      );
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/fetch-unsplash-image`;
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({ keyword: imageKeyword }),
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch image");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch image");
       }
 
       const data = await response.json();
-      if (data.results && data.results.length > 0) {
-        const image = data.results[0];
-        const photographerUrl = `${image.user.links.html}?utm_source=slidesmith&utm_medium=referral`;
-        const unsplashUrl = `${image.links.html}?utm_source=slidesmith&utm_medium=referral`;
-
-        onUpdate({
-          ...slide,
-          imageKeyword,
-          imageUrl: image.urls.regular,
-          imageAttribution: {
-            photographerName: image.user.name,
-            photographerUrl: photographerUrl,
-            unsplashUrl: unsplashUrl,
-          },
-        });
-        toast.success("Image updated successfully");
-      } else {
-        toast.error("No images found for this keyword");
-      }
+      onUpdate({
+        ...slide,
+        imageKeyword,
+        imageUrl: data.imageUrl,
+        imageAttribution: data.attribution,
+      });
+      toast.success("Image updated successfully");
     } catch (error) {
       console.error("Error fetching image:", error);
-      toast.error("Failed to fetch image");
+      toast.error(error instanceof Error ? error.message : "Failed to fetch image");
     } finally {
       setIsLoadingImage(false);
+    }
+  };
+
+  const handleRegenerateText = async () => {
+    setIsRegeneratingText(true);
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/regenerate-slide-text`;
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          title: slide.title,
+          bullets: slide.bullets,
+          notes: slide.notes,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to regenerate text");
+      }
+
+      const data = await response.json();
+      onUpdate({
+        ...slide,
+        title: data.title,
+        bullets: data.bullets,
+        notes: data.notes,
+      });
+      toast.success("Text regenerated successfully");
+    } catch (error) {
+      console.error("Error regenerating text:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to regenerate text");
+    } finally {
+      setIsRegeneratingText(false);
     }
   };
 
@@ -141,6 +170,26 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
           </div>
           <p className="text-xs text-slate-500">
             Update keyword and click to fetch a matching image
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label>AI Actions</Label>
+          <Button
+            variant="outline"
+            className="w-full justify-start text-slate-400 hover:text-white border-slate-700 hover:bg-slate-800"
+            onClick={handleRegenerateText}
+            disabled={isRegeneratingText}
+          >
+            {isRegeneratingText ? (
+              <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <RefreshCw className="mr-2 h-4 w-4" />
+            )}
+            Regenerate Text with AI
+          </Button>
+          <p className="text-xs text-slate-500">
+            AI will improve title, bullets, and speaker notes
           </p>
         </div>
       </div>
