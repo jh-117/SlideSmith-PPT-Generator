@@ -91,7 +91,7 @@ export function BriefForm({ onBack, onSubmit, isLoading, initialBrief }: BriefFo
   };
 
   const renderSuggestions = (field: keyof Brief) => (
-    <div className="flex flex-wrap gap-1.5 md:gap-2 mt-2">
+    <div className="flex flex-wrap gap-2 mt-2">
       {SUGGESTIONS[field].map((suggestion, i) => (
         <Button
           key={i}
@@ -99,7 +99,7 @@ export function BriefForm({ onBack, onSubmit, isLoading, initialBrief }: BriefFo
           variant="outline"
           size="sm"
           onClick={() => handleSuggestionClick(field, suggestion)}
-          className="text-[10px] md:text-xs h-6 md:h-7 px-2 md:px-3 bg-slate-800/50 border-slate-700 hover:bg-slate-700 hover:text-blue-300 text-slate-400"
+          className="text-xs h-7 bg-slate-800/50 border-slate-700 hover:bg-slate-700 hover:text-blue-300 text-slate-400"
         >
           {suggestion.length > 40 ? suggestion.substring(0, 40) + '...' : suggestion}
         </Button>
@@ -108,24 +108,21 @@ export function BriefForm({ onBack, onSubmit, isLoading, initialBrief }: BriefFo
   );
 
   return (
-    <div className="min-h-screen p-4 sm:p-6 md:p-12 max-w-4xl mx-auto flex flex-col justify-center">
-      <div className="flex justify-between items-center mb-4 md:mb-6 gap-2">
+    <div className="min-h-screen p-6 md:p-12 max-w-4xl mx-auto flex flex-col justify-center">
+      <div className="flex justify-between items-center mb-6">
         <Button
           variant="ghost"
           onClick={onBack}
           className="text-slate-400 hover:text-white"
         >
-          <ArrowLeft className="mr-1 md:mr-2 h-4 w-4" />
-          <span className="hidden sm:inline">Back</span>
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back
         </Button>
         <Button
           variant="outline"
           onClick={handleAutofill}
-          className="text-indigo-400 border-indigo-500/30 hover:bg-indigo-500/10 hover:text-indigo-300 text-xs sm:text-sm"
+          className="text-indigo-400 border-indigo-500/30 hover:bg-indigo-500/10 hover:text-indigo-300"
         >
-          <Wand2 className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-          <span className="hidden sm:inline">Autofill Example</span>
-          <span className="sm:hidden">Autofill</span>
+          <Wand2 className="mr-2 h-4 w-4" /> Autofill Example
         </Button>
       </div>
 
@@ -133,9 +130,9 @@ export function BriefForm({ onBack, onSubmit, isLoading, initialBrief }: BriefFo
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div className="mb-6 md:mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Project Brief</h2>
-          <p className="text-sm md:text-base text-slate-400">Tell us about your presentation needs. Use the quick-picks to speed things up.</p>
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-white mb-2">Project Brief</h2>
+          <p className="text-slate-400">Tell us about your presentation needs. Use the quick-picks to speed things up.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -227,19 +224,15 @@ export function BriefForm({ onBack, onSubmit, isLoading, initialBrief }: BriefFo
             type="submit"
             disabled={isLoading}
             size="lg"
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-5 md:py-6 text-base md:text-lg shadow-[0_0_20px_rgba(56,189,248,0.3)] transition-all"
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-6 text-lg shadow-[0_0_20px_rgba(56,189,248,0.3)] transition-all"
           >
             {isLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 md:h-5 md:w-5 animate-spin" />
-                <span className="hidden sm:inline">Generating Deck...</span>
-                <span className="sm:hidden">Generating...</span>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Generating Deck...
               </>
             ) : (
               <>
-                <Sparkles className="mr-2 h-4 w-4 md:h-5 md:w-5" />
-                <span className="hidden sm:inline">Generate 5-Slide Deck</span>
-                <span className="sm:hidden">Generate Deck</span>
+                <Sparkles className="mr-2 h-5 w-5" /> Generate 5-Slide Deck
               </>
             )}
           </Button>
