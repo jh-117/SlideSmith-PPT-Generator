@@ -116,21 +116,21 @@ export function DeckEditor({
 
       {/* Main Workspace */}
       <div className="flex flex-1 overflow-hidden">
-        
+
         {/* Left Sidebar: Slide Thumbnails */}
-        <div className="w-72 bg-[#0a0c10] border-r border-slate-800 flex flex-col overflow-y-auto custom-scrollbar">
-          <div className="p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50 mb-2">
+        <div className="w-48 md:w-60 lg:w-72 bg-[#0a0c10] border-r border-slate-800 flex flex-col overflow-y-auto custom-scrollbar">
+          <div className="p-3 md:p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50 mb-2">
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Slide Deck</h3>
           </div>
-          <div className="px-4 pb-4 space-y-4">
+          <div className="px-2 md:px-4 pb-4 space-y-3 md:space-y-4">
             {deck.slides.map((slide, index) => (
-              <div 
+              <div
                 key={slide.id}
                 onClick={() => setActiveSlideId(slide.id)}
                 className={cn(
                   "group relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200",
                   (activeSlideId === slide.id || (!activeSlideId && index === 0))
-                    ? "border-blue-500 ring-4 ring-blue-500/10 scale-[1.02]" 
+                    ? "border-blue-500 ring-4 ring-blue-500/10 scale-[1.02]"
                     : "border-slate-800 hover:border-slate-600 opacity-70 hover:opacity-100"
                 )}
               >
@@ -138,7 +138,7 @@ export function DeckEditor({
                 <div className="pointer-events-none origin-top-left transform scale-[0.22]" style={{ width: '960px', height: '540px', marginBottom: '-421px' }}>
                   <SlidePreview slide={slide} />
                 </div>
-                
+
                 {/* Overlay Number */}
                 <div className={cn(
                   "absolute bottom-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur transition-colors",
@@ -154,12 +154,12 @@ export function DeckEditor({
         </div>
 
         {/* Center Canvas */}
-        <div className="flex-1 bg-[#161922] relative flex flex-col items-center justify-center p-8 overflow-hidden">
+        <div className="flex-1 bg-[#161922] relative flex flex-col items-center justify-center p-2 md:p-4 lg:p-8 overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
-          
+
           {activeSlide && (
-            <div className="relative z-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.7)]">
+            <div className="relative z-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.7)] w-full max-w-full flex items-center justify-center">
                <SlidePreview slide={activeSlide} scale={0.85} />
             </div>
           )}

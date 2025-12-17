@@ -35,7 +35,7 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
   };
 
   return (
-    <div className="w-80 bg-slate-900 border-l border-slate-800 p-6 flex flex-col gap-6 overflow-y-auto h-full">
+    <div className="hidden lg:flex w-64 xl:w-80 bg-slate-900 border-l border-slate-800 p-4 xl:p-6 flex-col gap-4 xl:gap-6 overflow-y-auto h-full">
       <div>
         <h3 className="text-lg font-semibold text-white mb-1">Edit Slide</h3>
         <p className="text-xs text-slate-500">Customize content and visuals</p>
@@ -57,7 +57,7 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
           id="slide-bullets"
           value={slide.bullets.join('\n')}
           onChange={handleBulletsChange}
-          className="min-h-[150px] bg-slate-950 border-slate-700 font-mono text-sm"
+          className="min-h-[120px] xl:min-h-[150px] bg-slate-950 border-slate-700 font-mono text-sm"
         />
       </div>
 
@@ -67,7 +67,7 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
           id="slide-notes"
           value={slide.notes}
           onChange={handleNotesChange}
-          className="min-h-[100px] bg-slate-950 border-slate-700 text-slate-400 italic"
+          className="min-h-[80px] xl:min-h-[100px] bg-slate-950 border-slate-700 text-slate-400 italic"
         />
       </div>
 
