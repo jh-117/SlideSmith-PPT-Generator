@@ -1,6 +1,9 @@
 import { Button } from "./ui/button";
 import { motion } from "motion/react";
 import { ArrowRight, Sparkles } from "lucide-react";
+import kadoshLogo from '../assets/kadoshAI.png';
+import BackgroundMusic from './BackgroundMusic';
+import themeMusic from '../assets/slidesmith-theme.mp3';
 
 interface HeroProps {
   onStart: () => void;
