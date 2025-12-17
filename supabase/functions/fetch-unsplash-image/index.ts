@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
-const UNSPLASH_ACCESS_KEY = "fZGZ5q-hGH9_PGU3k7vVeJd3NMQIiJXz_fOGH-_bZRw";
+const UNSPLASH_ACCESS_KEY = Deno.env.get("UNSPLASH_ACCESS_KEY");
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -17,6 +17,10 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
+    if (!UNSPLASH_ACCESS_KEY) {
+      throw new Error("Unsplash API key is not configured");
+    }
+
     const { keyword } = await req.json();
 
     if (!keyword || typeof keyword !== 'string') {
