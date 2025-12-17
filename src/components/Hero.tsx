@@ -1,7 +1,6 @@
 import { Button } from "./ui/button";
 import { motion } from "motion/react";
 import { ArrowRight, Sparkles } from "lucide-react";
-import kadoshLogo from '../assets/kadoshAI.png';
 import BackgroundMusic from './BackgroundMusic';
 import themeMusic from '../assets/slidesmith-theme.mp3';
 
@@ -11,8 +10,9 @@ interface HeroProps {
 
 export function Hero({ onStart }: HeroProps) {
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center text-center p-6 overflow-hidden">
+    <div className="relative min-h-[calc(100vh-200px)] flex flex-col items-center justify-center text-center p-6 overflow-hidden">
       <BackgroundMusic src={themeMusic} />
+      
       {/* Background Effects */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900/50 via-[#0f111a] to-[#0f111a]" />
       <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
@@ -20,7 +20,7 @@ export function Hero({ onStart }: HeroProps) {
       {/* Glow Orbs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-
+      
       <div className="relative z-10 max-w-4xl mx-auto space-y-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -42,7 +42,7 @@ export function Hero({ onStart }: HeroProps) {
             AI-powered executive slide deck creator — from brief to full PPTX with visuals in minutes.
           </p>
         </motion.div>
-
+        
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -58,7 +58,7 @@ export function Hero({ onStart }: HeroProps) {
             GENERATE DECK <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </motion.div>
-
+        
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
