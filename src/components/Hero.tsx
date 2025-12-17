@@ -23,18 +23,18 @@ export function Hero({ onStart }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Sparkles className="w-6 h-6 text-primary animate-pulse" />
-            <span className="text-sm font-medium tracking-widest uppercase text-primary/80">
+          <div className="flex items-center justify-center gap-2 mb-4 md:mb-6">
+            <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-primary animate-pulse" />
+            <span className="text-xs md:text-sm font-medium tracking-widest uppercase text-primary/80">
               AI-Powered Presentation Architect
             </span>
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-white mb-6 drop-shadow-[0_0_15px_rgba(56,189,248,0.3)]">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-4 md:mb-6 drop-shadow-[0_0_15px_rgba(56,189,248,0.3)]">
             Slide<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Smith</span>
           </h1>
-          
-          <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-400 max-w-2xl mx-auto leading-relaxed px-4">
             AI-powered executive slide deck creator — from brief to full PPTX with visuals in minutes.
           </p>
         </motion.div>
@@ -46,12 +46,12 @@ export function Hero({ onStart }: HeroProps) {
           className="relative group"
         >
           <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-          <Button 
+          <Button
             onClick={onStart}
-            size="lg" 
-            className="relative px-8 py-8 text-lg bg-background border border-orange-500/50 text-orange-100 hover:bg-orange-950/30 hover:text-white hover:border-orange-400 transition-all shadow-[0_0_20px_rgba(249,115,22,0.1)]"
+            size="lg"
+            className="relative px-6 py-6 md:px-8 md:py-8 text-base md:text-lg bg-background border border-orange-500/50 text-orange-100 hover:bg-orange-950/30 hover:text-white hover:border-orange-400 transition-all shadow-[0_0_20px_rgba(249,115,22,0.1)]"
           >
-            GENERATE DECK <ArrowRight className="ml-2 w-5 h-5" />
+            GENERATE DECK <ArrowRight className="ml-2 w-4 h-4 md:w-5 md:h-5" />
           </Button>
         </motion.div>
 
