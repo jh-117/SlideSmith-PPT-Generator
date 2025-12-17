@@ -5,14 +5,7 @@
 
   ## Setup
 
-  1. Run `npm i` to install the dependencies.
-
-  2. Add your OpenAI API key to the `.env` file:
-     ```
-     VITE_OPENAI_API_KEY=your-api-key-here
-     ```
-
-  3. Get your OpenAI API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+  Run `npm i` to install the dependencies.
 
   ## Running the code
 
@@ -21,7 +14,12 @@
   ## Features
 
   - AI-powered presentation generation using GPT-4
+  - Secure API key management via Supabase Edge Functions
   - Automatic image sourcing from Unsplash
   - Interactive slide editor
   - Export to PowerPoint format
   - Version control for your decks
+
+  ## Architecture
+
+  The app uses Supabase Edge Functions to securely handle OpenAI API calls on the backend, ensuring API keys are never exposed to the frontend.
