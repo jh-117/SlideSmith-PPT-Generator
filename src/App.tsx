@@ -5,7 +5,7 @@ import { LoadingState } from "./components/LoadingState";
 import { DeckEditor } from "./components/DeckEditor";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import { Brief, Deck } from "./lib/types";
-import { generateDeck } from "./lib/mockAI";
+import { generateDeck } from "./lib/openai";
 import { exportDeck } from "./lib/pptxGenerator";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
