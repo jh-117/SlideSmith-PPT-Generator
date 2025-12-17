@@ -9,6 +9,7 @@ interface HeroProps {
 export function Hero({ onStart }: HeroProps) {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center text-center p-6 overflow-hidden">
+      <BackgroundMusic src={themeMusic} />
       {/* Background Effects */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900/50 via-[#0f111a] to-[#0f111a]" />
       <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
