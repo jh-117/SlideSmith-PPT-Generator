@@ -23,14 +23,14 @@ interface DeckEditorProps {
   onBack: () => void;
 }
 
-export function DeckEditor({
-  deck,
-  versions,
-  onSwitchVersion,
+export function DeckEditor({ 
+  deck, 
+  versions, 
+  onSwitchVersion, 
   onSaveVersion,
-  onUpdateDeck,
-  onExport,
-  onBack
+  onUpdateDeck, 
+  onExport, 
+  onBack 
 }: DeckEditorProps) {
   const [activeSlideId, setActiveSlideId] = useState<string>("");
 
@@ -65,9 +65,9 @@ export function DeckEditor({
           <Button variant="ghost" size="sm" onClick={onBack} className="text-slate-400 hover:text-white hover:bg-slate-800">
             <ChevronLeft className="mr-1 h-4 w-4" /> Start Over
           </Button>
-
+          
           <div className="h-8 w-px bg-slate-800" />
-
+          
           <div>
             <h1 className="font-semibold text-base text-slate-100">
               {deck.topic}
@@ -94,9 +94,9 @@ export function DeckEditor({
                 ))}
               </SelectContent>
             </Select>
-            <Button
-              size="sm"
-              variant="ghost"
+            <Button 
+              size="sm" 
+              variant="ghost" 
               onClick={onSaveVersion}
               className="h-8 w-8 p-0 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10"
               title="Save as new version"
@@ -105,7 +105,7 @@ export function DeckEditor({
             </Button>
           </div>
 
-           <Button
+           <Button 
             onClick={onExport}
             className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20 border-0"
           >
@@ -116,7 +116,7 @@ export function DeckEditor({
 
       {/* Main Workspace */}
       <div className="flex flex-1 overflow-hidden">
-
+        
         {/* Left Sidebar: Slide Thumbnails */}
         <div className="w-72 bg-[#0a0c10] border-r border-slate-800 flex flex-col overflow-y-auto custom-scrollbar">
           <div className="p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50 mb-2">
@@ -124,13 +124,13 @@ export function DeckEditor({
           </div>
           <div className="px-4 pb-4 space-y-4">
             {deck.slides.map((slide, index) => (
-              <div
+              <div 
                 key={slide.id}
                 onClick={() => setActiveSlideId(slide.id)}
                 className={cn(
                   "group relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200",
                   (activeSlideId === slide.id || (!activeSlideId && index === 0))
-                    ? "border-blue-500 ring-4 ring-blue-500/10 scale-[1.02]"
+                    ? "border-blue-500 ring-4 ring-blue-500/10 scale-[1.02]" 
                     : "border-slate-800 hover:border-slate-600 opacity-70 hover:opacity-100"
                 )}
               >
@@ -138,7 +138,7 @@ export function DeckEditor({
                 <div className="pointer-events-none origin-top-left transform scale-[0.22]" style={{ width: '960px', height: '540px', marginBottom: '-421px' }}>
                   <SlidePreview slide={slide} />
                 </div>
-
+                
                 {/* Overlay Number */}
                 <div className={cn(
                   "absolute bottom-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur transition-colors",
@@ -157,7 +157,7 @@ export function DeckEditor({
         <div className="flex-1 bg-[#161922] relative flex flex-col items-center justify-center p-8 overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
-
+          
           {activeSlide && (
             <div className="relative z-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.7)]">
                <SlidePreview slide={activeSlide} scale={0.85} />
