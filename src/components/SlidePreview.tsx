@@ -60,13 +60,13 @@ export function SlidePreview({ slide, scale = 1, isActive, onClick }: SlidePrevi
                     className="w-full h-full object-cover opacity-80"
                   />
                   {slide.imageAttribution && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1 text-[10px] text-white/80">
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/80 px-3 py-2 text-xs text-white">
                       Photo by{' '}
                       <a
                         href={slide.imageAttribution.photographerUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline hover:text-white"
+                        className="font-semibold underline hover:text-blue-300"
                       >
                         {slide.imageAttribution.photographerName}
                       </a>
@@ -75,7 +75,7 @@ export function SlidePreview({ slide, scale = 1, isActive, onClick }: SlidePrevi
                         href={slide.imageAttribution.unsplashUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline hover:text-white"
+                        className="font-semibold underline hover:text-blue-300"
                       >
                         Unsplash
                       </a>
