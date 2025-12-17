@@ -53,11 +53,35 @@ export function SlidePreview({ slide, scale = 1, isActive, onClick }: SlidePrevi
           <div className="w-1/3 h-full pb-8">
             <div className="w-full h-full rounded-lg overflow-hidden bg-slate-800 border border-slate-700 relative">
               {slide.imageUrl ? (
-                <img 
-                  src={slide.imageUrl} 
-                  alt={slide.imageKeyword} 
-                  className="w-full h-full object-cover opacity-80"
-                />
+                <>
+                  <img
+                    src={slide.imageUrl}
+                    alt={slide.imageKeyword}
+                    className="w-full h-full object-cover opacity-80"
+                  />
+                  {slide.imageAttribution && (
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1 text-[10px] text-white/80">
+                      Photo by{' '}
+                      <a
+                        href={slide.imageAttribution.photographerUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-white"
+                      >
+                        {slide.imageAttribution.photographerName}
+                      </a>
+                      {' '}on{' '}
+                      <a
+                        href={slide.imageAttribution.unsplashUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-white"
+                      >
+                        Unsplash
+                      </a>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="flex items-center justify-center h-full text-slate-500">
                   Visual Placeholder

@@ -64,6 +64,21 @@ export const exportDeck = async (deck: Deck) => {
         x: 6, y: 1.8, w: 3.5, h: 3,
         sizing: { type: "cover", w: 3.5, h: 3 }
       });
+
+      // Attribution
+      if (slide.imageAttribution) {
+        s.addText(
+          `Photo by ${slide.imageAttribution.photographerName} on Unsplash`,
+          {
+            x: 6, y: 4.85, w: 3.5, h: 0.2,
+            fontSize: 8,
+            fontFace: "Arial",
+            color: "94A3B8",
+            align: "right",
+            italic: true
+          }
+        );
+      }
     }
 
     // Notes

@@ -3,8 +3,13 @@ export interface Slide {
   title: string;
   bullets: string[];
   notes: string;
-  imageKeyword: string; // Used to fetch image or placeholder
+  imageKeyword: string;
   imageUrl?: string;
+  imageAttribution?: {
+    photographerName: string;
+    photographerUrl: string;
+    unsplashUrl: string;
+  };
 }
 
 export interface Deck {
