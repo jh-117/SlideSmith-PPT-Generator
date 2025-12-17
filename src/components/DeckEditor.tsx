@@ -23,16 +23,39 @@ interface DeckEditorProps {
   onBack: () => void;
 }
 
-export function DeckEditor({ 
-  deck, 
-  versions, 
-  onSwitchVersion, 
+export function DeckEditor({
+  deck,
+  versions,
+  onSwitchVersion,
   onSaveVersion,
-  onUpdateDeck, 
-  onExport, 
-  onBack 
+  onUpdateDeck,
+  onExport,
+  onBack
 }: DeckEditorProps) {
   const [activeSlideId, setActiveSlideId] = useState<string>("");
+  const [previewScale, setPreviewScale] = useState(0.65);
+
+  // Update preview scale based on window size
+  useEffect(() => {
+    const updateScale = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setPreviewScale(0.35);
+      } else if (width < 768) {
+        setPreviewScale(0.45);
+      } else if (width < 1024) {
+        setPreviewScale(0.55);
+      } else if (width < 1280) {
+        setPreviewScale(0.65);
+      } else {
+        setPreviewScale(0.8);
+      }
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
 
   // Update active slide if deck changes (e.g. version switch) or on init
   useEffect(() => {
@@ -60,15 +83,15 @@ export function DeckEditor({
   return (
     <div className="flex flex-col h-screen bg-[#0f111a] text-white overflow-hidden">
       {/* Top Bar */}
-      <header className="h-16 border-b border-slate-800 flex items-center justify-between px-6 bg-slate-900/80 backdrop-blur-md z-20">
-        <div className="flex items-center gap-6">
-          <Button variant="ghost" size="sm" onClick={onBack} className="text-slate-400 hover:text-white hover:bg-slate-800">
-            <ChevronLeft className="mr-1 h-4 w-4" /> Start Over
+      <header className="h-14 md:h-16 border-b border-slate-800 flex items-center justify-between px-2 md:px-6 bg-slate-900/80 backdrop-blur-md z-20">
+        <div className="flex items-center gap-2 md:gap-6">
+          <Button variant="ghost" size="sm" onClick={onBack} className="text-slate-400 hover:text-white hover:bg-slate-800 px-2">
+            <ChevronLeft className="h-4 w-4" /><span className="hidden sm:inline ml-1">Start Over</span>
           </Button>
-          
-          <div className="h-8 w-px bg-slate-800" />
-          
-          <div>
+
+          <div className="h-8 w-px bg-slate-800 hidden md:block" />
+
+          <div className="hidden md:block">
             <h1 className="font-semibold text-base text-slate-100">
               {deck.topic}
             </h1>
@@ -78,12 +101,12 @@ export function DeckEditor({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Version Control */}
-          <div className="flex items-center gap-2 mr-4 bg-slate-950 rounded-md p-1 border border-slate-800">
+          <div className="hidden lg:flex items-center gap-2 mr-2 lg:mr-4 bg-slate-950 rounded-md p-1 border border-slate-800">
              <History className="w-4 h-4 ml-2 text-slate-500" />
              <Select value={deck.id} onValueChange={onSwitchVersion}>
-              <SelectTrigger className="w-[140px] h-8 text-xs border-none bg-transparent focus:ring-0">
+              <SelectTrigger className="w-[120px] lg:w-[140px] h-8 text-xs border-none bg-transparent focus:ring-0">
                 <SelectValue placeholder="Version" />
               </SelectTrigger>
               <SelectContent>
@@ -94,9 +117,9 @@ export function DeckEditor({
                 ))}
               </SelectContent>
             </Select>
-            <Button 
-              size="sm" 
-              variant="ghost" 
+            <Button
+              size="sm"
+              variant="ghost"
               onClick={onSaveVersion}
               className="h-8 w-8 p-0 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10"
               title="Save as new version"
@@ -105,11 +128,11 @@ export function DeckEditor({
             </Button>
           </div>
 
-           <Button 
+           <Button
             onClick={onExport}
-            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20 border-0"
+            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20 border-0 text-sm px-3"
           >
-            <Download className="mr-2 h-4 w-4" /> Export PPTX
+            <Download className="h-4 w-4" /><span className="hidden sm:inline ml-2">Export PPTX</span>
           </Button>
         </div>
       </header>
@@ -118,11 +141,11 @@ export function DeckEditor({
       <div className="flex flex-1 overflow-hidden">
 
         {/* Left Sidebar: Slide Thumbnails */}
-        <div className="w-48 md:w-60 lg:w-72 bg-[#0a0c10] border-r border-slate-800 flex flex-col overflow-y-auto custom-scrollbar">
-          <div className="p-3 md:p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50 mb-2">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Slide Deck</h3>
+        <div className="w-32 sm:w-40 md:w-52 lg:w-64 xl:w-72 bg-[#0a0c10] border-r border-slate-800 flex flex-col overflow-y-auto custom-scrollbar">
+          <div className="p-2 md:p-3 lg:p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50 mb-2">
+            <h3 className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider">Slide Deck</h3>
           </div>
-          <div className="px-2 md:px-4 pb-4 space-y-3 md:space-y-4">
+          <div className="px-1 sm:px-2 md:px-4 pb-4 space-y-2 md:space-y-3 lg:space-y-4">
             {deck.slides.map((slide, index) => (
               <div
                 key={slide.id}
@@ -154,13 +177,13 @@ export function DeckEditor({
         </div>
 
         {/* Center Canvas */}
-        <div className="flex-1 bg-[#161922] relative flex flex-col items-center justify-center p-2 md:p-4 lg:p-8 overflow-hidden">
+        <div className="flex-1 min-w-0 bg-[#161922] relative flex flex-col items-center justify-center p-1 sm:p-2 md:p-4 lg:p-6 xl:p-8 overflow-auto">
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
 
           {activeSlide && (
-            <div className="relative z-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.7)] w-full max-w-full flex items-center justify-center">
-               <SlidePreview slide={activeSlide} scale={0.85} />
+            <div className="relative z-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.7)]">
+               <SlidePreview slide={activeSlide} scale={previewScale} />
             </div>
           )}
         </div>
