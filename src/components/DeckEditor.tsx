@@ -157,13 +157,13 @@ export function DeckEditor({
         {/* LEFT SIDEBAR */}
         <aside
           className={cn(
-            "bg-[#0a0c10] border-r border-slate-800 flex-shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden",
-            isSidebarCollapsed ? "w-0" : "w-72"
+            "bg-[#0a0c10] border-r border-slate-800 flex-shrink-0 transition-[width] duration-300 ease-in-out flex flex-col",
+            isSidebarCollapsed ? "w-0 overflow-hidden" : "w-72 overflow-y-auto custom-scrollbar"
           )}
         >
           <div
             className={cn(
-              "h-full transition-opacity duration-200",
+              "flex flex-col min-w-72 transition-opacity duration-200",
               isSidebarCollapsed
                 ? "opacity-0 pointer-events-none"
                 : "opacity-100"
@@ -175,13 +175,13 @@ export function DeckEditor({
               </h3>
             </div>
 
-            <div className="px-4 py-4 space-y-4 overflow-y-auto custom-scrollbar">
+            <div className="px-4 py-4 space-y-4">
               {deck.slides.map((slide, index) => (
                 <div
                   key={slide.id}
                   onClick={() => setActiveSlideId(slide.id)}
                   className={cn(
-                    "relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all",
+                    "relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200",
                     activeSlideId === slide.id
                       ? "border-blue-500 ring-4 ring-blue-500/10 scale-[1.02]"
                       : "border-slate-800 hover:border-slate-600 opacity-70 hover:opacity-100"
@@ -198,7 +198,12 @@ export function DeckEditor({
                     <SlidePreview slide={slide} />
                   </div>
 
-                  <div className="absolute bottom-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/60">
+                  <div className={cn(
+                    "absolute bottom-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur transition-colors",
+                    activeSlideId === slide.id
+                      ? "bg-blue-600 text-white"
+                      : "bg-black/60 text-slate-300"
+                  )}>
                     {index + 1}
                   </div>
                 </div>
@@ -209,8 +214,9 @@ export function DeckEditor({
 
         {/* CENTER CANVAS */}
         <main className="flex-1 min-w-0 bg-[#161922] relative flex items-center justify-center p-8 overflow-hidden">
-
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
+
           {activeSlide && (
             <div className="relative z-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.7)]">
               <SlidePreview slide={activeSlide} scale={0.85} />
