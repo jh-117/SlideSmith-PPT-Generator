@@ -104,6 +104,7 @@ src/
 │   ├── Hero.tsx        # Landing page
 │   ├── BriefForm.tsx   # Project brief form
 │   ├── DeckEditor.tsx  # Main editor interface
+│   ├── EditorHelpPanel.tsx # Contextual help guide
 │   └── ui/             # Reusable UI components
 ├── lib/                # Core logic
 │   ├── types.ts        # TypeScript interfaces

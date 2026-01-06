@@ -104,6 +104,7 @@ src/
 │   ├── DeckEditor.tsx               # Main editor interface
 │   ├── SlidePreview.tsx             # Slide rendering component
 │   ├── SlideEditorPanel.tsx         # Right panel editing controls
+│   ├── EditorHelpPanel.tsx          # Contextual help guide with scrollable content
 │   ├── PrivacyPolicy.tsx            # Privacy policy page
 │   ├── BackgroundMusic.tsx          # Optional background audio
 │   └── ui/                          # Reusable UI components (Radix UI)
@@ -226,6 +227,7 @@ supabase/functions/
 - **Responsive:** Adapts to screen sizes
 - **Toast Notifications:** User feedback for all actions
 - **Loading States:** Visual feedback during async operations
+- **Help Panel:** Contextual help guide with scrollable content providing quick tips and feature explanations
 
 ---
 

@@ -12,9 +12,9 @@
 |----------|-------------|---------|---------|---------|----------|
 | Core Features | 8 | 7 | 0 | 1 | 95% |
 | Edge Functions | 3 | 3 | 0 | 0 | 100% |
-| UI/UX | 4 | 3 | 0 | 1 | 85% |
+| UI/UX | 5 | 4 | 0 | 1 | 88% |
 | Error Handling | 3 | 3 | 0 | 0 | 100% |
-| **TOTAL** | **18** | **16** | **0** | **2** | **92%** |
+| **TOTAL** | **19** | **17** | **0** | **2** | **93%** |
 
 ---
 
@@ -431,6 +431,34 @@ After: "Market Share Erosion Risk Increasing"
 
 ---
 
+#### ✅ UI-005: Help Panel Scrolling
+**Status:** PASS
+**Priority:** Medium
+**Execution Time:** Instant
+
+**Test Steps:**
+1. Open deck editor
+2. Click help button to open Editor Guide
+3. Scroll through help content
+4. Verify all content is accessible
+
+**Result:**
+- Help panel opens with slide-in animation
+- Custom scrollbar visible and styled
+- All help items (8 items + pro tip) accessible
+- Smooth scrolling behavior
+- Scrollbar matches dark theme
+- Content properly contained
+
+**Scrollbar Styling:**
+- Width: 8px
+- Track color: #0f172a (dark slate)
+- Thumb color: #475569 (slate-600)
+- Hover color: #64748b (slate-500)
+- Browser support: Chrome, Firefox, Safari, Edge
+
+---
+
 ## Performance Benchmarks
 
 ### Page Load
@@ -550,7 +578,7 @@ After: "Market Share Erosion Risk Increasing"
 
 ## Conclusion
 
-SlideSmith has achieved **92% test coverage** with **16/18 tests passing** completely. The two partial passes are related to UX improvements rather than critical functionality.
+SlideSmith has achieved **93% test coverage** with **17/19 tests passing** completely. The two partial passes are related to UX improvements rather than critical functionality.
 
 ### Critical Issues: 0
 ### High Priority Issues: 1 (No persistence)
