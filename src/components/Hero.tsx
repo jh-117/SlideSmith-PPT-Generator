@@ -8,9 +8,10 @@ import kadoshLogo from '../assets/kadoshAI.png';
 interface HeroProps {
   onStart: () => void;
   onPrivacyPolicyClick: () => void;
+  onShowExamples: () => void;
 }
 
-export function Hero({ onStart, onPrivacyPolicyClick }: HeroProps) {
+export function Hero({ onStart, onPrivacyPolicyClick, onShowExamples }: HeroProps) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Main Hero Content */}
@@ -51,15 +52,25 @@ export function Hero({ onStart, onPrivacyPolicyClick }: HeroProps) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="relative group"
+            className="flex flex-col gap-4 items-center"
           >
-            <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-            <Button 
-              onClick={onStart}
-              size="lg" 
-              className="relative px-8 py-8 text-lg bg-background border border-orange-500/50 text-orange-100 hover:bg-orange-950/30 hover:text-white hover:border-orange-400 transition-all shadow-[0_0_20px_rgba(249,115,22,0.1)]"
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
+              <Button
+                onClick={onStart}
+                size="lg"
+                className="relative px-8 py-8 text-lg bg-background border border-orange-500/50 text-orange-100 hover:bg-orange-950/30 hover:text-white hover:border-orange-400 transition-all shadow-[0_0_20px_rgba(249,115,22,0.1)]"
+              >
+                GENERATE DECK <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </div>
+            <Button
+              onClick={onShowExamples}
+              variant="ghost"
+              size="lg"
+              className="text-slate-400 hover:text-blue-400 transition-colors"
             >
-              GENERATE DECK <ArrowRight className="ml-2 w-5 h-5" />
+              View Examples
             </Button>
           </motion.div>
           
