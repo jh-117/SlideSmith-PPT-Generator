@@ -151,3 +151,26 @@
 html {
   font-size: var(--font-size);
 }
+
+.editor-help-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.editor-help-scroll::-webkit-scrollbar-track {
+  background: #0f172a;
+  border-radius: 4px;
+}
+
+.editor-help-scroll::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+.editor-help-scroll::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+.editor-help-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #475569 #0f172a;
+}
