@@ -208,7 +208,8 @@ export function DeckEditor({
         </aside>
 
         {/* CENTER CANVAS */}
-        <main className="flex-1 bg-[#161922] relative flex items-center justify-center p-8 overflow-hidden">
+        <main className="flex-1 min-w-0 bg-[#161922] relative flex items-center justify-center p-8 overflow-hidden">
+
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
           {activeSlide && (
             <div className="relative z-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.7)]">
