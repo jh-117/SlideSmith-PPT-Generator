@@ -157,49 +157,51 @@ export function DeckEditor({
         {/* LEFT SIDEBAR */}
         <aside
           className={cn(
-            "bg-[#0a0c10] border-r border-slate-800 flex-shrink-0 transition-[width] duration-300 ease-in-out flex flex-col",
-            isSidebarCollapsed ? "w-0 overflow-hidden" : "w-72 overflow-y-auto custom-scrollbar"
+            "bg-[#0a0c10] border-r border-slate-800 flex-shrink-0 transition-all duration-300 ease-in-out",
+            isSidebarCollapsed ? "w-0 border-r-0" : "w-72"
           )}
         >
           <div
             className={cn(
-              "flex flex-col min-w-72 transition-opacity duration-200",
+              "h-full w-72 flex flex-col transition-opacity duration-200",
               isSidebarCollapsed
                 ? "opacity-0 pointer-events-none"
                 : "opacity-100"
             )}
           >
-            <div className="p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50">
+            <div className="p-4 border-b border-slate-800/50 flex-shrink-0">
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Slide Deck
               </h3>
             </div>
 
-            <div className="px-4 py-4 space-y-4">
+            <div className="flex-1 overflow-y-auto custom-scrollbar px-4 py-4 space-y-3">
               {deck.slides.map((slide, index) => (
                 <div
                   key={slide.id}
                   onClick={() => setActiveSlideId(slide.id)}
                   className={cn(
-                    "relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200",
+                    "relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200 aspect-video",
                     activeSlideId === slide.id
-                      ? "border-blue-500 ring-4 ring-blue-500/10 scale-[1.02]"
+                      ? "border-blue-500 ring-2 ring-blue-500/20"
                       : "border-slate-800 hover:border-slate-600 opacity-70 hover:opacity-100"
                   )}
                 >
-                  <div
-                    className="pointer-events-none origin-top-left transform scale-[0.22]"
-                    style={{
-                      width: 960,
-                      height: 540,
-                      marginBottom: -421,
-                    }}
-                  >
-                    <SlidePreview slide={slide} />
+                  <div className="w-full h-full overflow-hidden">
+                    <div
+                      className="pointer-events-none origin-top-left"
+                      style={{
+                        transform: 'scale(0.267)',
+                        width: '960px',
+                        height: '540px',
+                      }}
+                    >
+                      <SlidePreview slide={slide} />
+                    </div>
                   </div>
 
                   <div className={cn(
-                    "absolute bottom-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur transition-colors",
+                    "absolute bottom-1.5 left-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur-sm transition-colors",
                     activeSlideId === slide.id
                       ? "bg-blue-600 text-white"
                       : "bg-black/60 text-slate-300"
