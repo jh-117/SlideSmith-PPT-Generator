@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Deck, Slide } from "../lib/types";
 import { SlidePreview } from "./SlidePreview";
 import { SlideEditorPanel } from "./SlideEditorPanel";
+import { EditorHelpPanel } from "./EditorHelpPanel";
 import { Button } from "./ui/button";
-import { Download, ChevronLeft, Save, History, Clock } from "lucide-react";
+import { Download, ChevronLeft, Save, History, Clock, HelpCircle } from "lucide-react";
+import { motion } from "motion/react";
 import { cn } from "../lib/utils";
 import {
   Select,
@@ -33,6 +35,8 @@ export function DeckEditor({
   onBack 
 }: DeckEditorProps) {
   const [activeSlideId, setActiveSlideId] = useState<string>("");
+  const [showHelp, setShowHelp] = useState<boolean>(false);
+  const [saving, setSaving] = useState<boolean>(false);
 
   // Update active slide if deck changes (e.g. version switch) or on init
   useEffect(() => {
@@ -54,6 +58,9 @@ export function DeckEditor({
     if (idx !== -1) {
       newSlides[idx] = updatedSlide;
       onUpdateDeck({ ...deck, slides: newSlides });
+
+      setSaving(true);
+      setTimeout(() => setSaving(false), 1000);
     }
   };
 
@@ -73,12 +80,36 @@ export function DeckEditor({
               {deck.topic}
             </h1>
             <p className="text-xs text-slate-500 flex items-center gap-1">
-              <Clock className="w-3 h-3" /> Last edited {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+              {saving ? (
+                <>
+                  <motion.div
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    className="w-3 h-3 rounded-full bg-blue-500"
+                  />
+                  <span className="text-blue-400">Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Clock className="w-3 h-3" /> Last edited {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                </>
+              )}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Help Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowHelp(true)}
+            className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10"
+            title="Help & Tips"
+          >
+            <HelpCircle className="h-4 w-4" />
+          </Button>
+
           {/* Version Control */}
           <div className="flex items-center gap-2 mr-4 bg-slate-950 rounded-md p-1 border border-slate-800">
              <History className="w-4 h-4 ml-2 text-slate-500" />
@@ -94,9 +125,9 @@ export function DeckEditor({
                 ))}
               </SelectContent>
             </Select>
-            <Button 
-              size="sm" 
-              variant="ghost" 
+            <Button
+              size="sm"
+              variant="ghost"
               onClick={onSaveVersion}
               className="h-8 w-8 p-0 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10"
               title="Save as new version"
@@ -105,7 +136,7 @@ export function DeckEditor({
             </Button>
           </div>
 
-           <Button 
+           <Button
             onClick={onExport}
             className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20 border-0"
           >
@@ -171,6 +202,9 @@ export function DeckEditor({
         )}
 
       </div>
+
+      {/* Editor Help Panel */}
+      <EditorHelpPanel isOpen={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   );
 }

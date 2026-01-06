@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Hero } from "./components/Hero";
-import { BriefForm } from "./components/BriefForm";
+import { BriefFormEnhanced } from "./components/BriefFormEnhanced";
 import { LoadingState } from "./components/LoadingState";
 import { DeckEditor } from "./components/DeckEditor";
 import PrivacyPolicy from "./components/PrivacyPolicy";
@@ -56,6 +56,7 @@ export default function App() {
 
   const handleUpdateDeck = (updatedDeck: Deck) => {
     setVersions(prev => prev.map(d => d.id === updatedDeck.id ? updatedDeck : d));
+    toast.success("Changes saved", { duration: 1500 });
   };
 
   const handleSaveVersion = () => {
@@ -107,7 +108,7 @@ export default function App() {
       )}
 
       {step === "brief" && (
-        <BriefForm
+        <BriefFormEnhanced
           onBack={() => setStep("landing")}
           onSubmit={handleBriefSubmit}
           isLoading={false}
