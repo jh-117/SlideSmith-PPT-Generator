@@ -74,9 +74,9 @@ export function EditorHelpPanel({ isOpen, onClose }: EditorHelpPanelProps) {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 300 }}
             transition={{ type: 'spring', damping: 25 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-slate-900 border-l border-slate-800 z-50 overflow-y-auto"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-slate-900 border-l border-slate-800 z-50 flex flex-col"
           >
-            <div className="p-6">
+            <div className="flex-shrink-0 p-6 border-b border-slate-800">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
@@ -91,7 +91,9 @@ export function EditorHelpPanel({ isOpen, onClose }: EditorHelpPanelProps) {
                   <X className="w-5 h-5" />
                 </Button>
               </div>
+            </div>
 
+            <div className="flex-1 overflow-y-auto p-6">
               <div className="space-y-4">
                 {HELP_ITEMS.map((item, index) => (
                   <motion.div
@@ -112,7 +114,7 @@ export function EditorHelpPanel({ isOpen, onClose }: EditorHelpPanelProps) {
                 ))}
               </div>
 
-              <div className="mt-8 p-4 rounded-lg bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/20">
+              <div className="mt-8 p-4 rounded-lg bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/20 mb-6">
                 <h3 className="font-semibold text-white mb-2 flex items-center gap-2">
                   <span>💡</span>
                   Pro Tip

@@ -13,6 +13,16 @@ import { exportDeck } from "./lib/pptxGenerator";
 import { savePresentation, loadPresentation, saveNewVersion, updatePresentation } from "./lib/database";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./components/ui/alert-dialog";
 
 type Step = "dashboard" | "landing" | "brief" | "generating" | "editor" | "privacy-policy" | "examples";
 
@@ -24,6 +34,7 @@ export default function App() {
   const [currentDeckId, setCurrentDeckId] = useState<string | null>(null);
   const [currentPresentationId, setCurrentPresentationId] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState<boolean>(false);
+  const [showBackConfirm, setShowBackConfirm] = useState<boolean>(false);
 
   const currentDeck = versions.find(d => d.id === currentDeckId) || null;
 
@@ -241,13 +252,34 @@ export default function App() {
           onSaveVersion={handleSaveVersion}
           onUpdateDeck={handleUpdateDeck}
           onExport={handleExport}
-          onBack={() => {
-            if (confirm("Return to dashboard? Your work is auto-saved.")) {
-              setStep("dashboard");
-            }
-          }}
+          onBack={() => setShowBackConfirm(true)}
         />
       )}
+
+      <AlertDialog open={showBackConfirm} onOpenChange={setShowBackConfirm}>
+        <AlertDialogContent className="bg-slate-900 border-slate-700">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Return to dashboard?</AlertDialogTitle>
+            <AlertDialogDescription className="text-slate-400">
+              Your work is auto-saved. You can come back anytime to continue editing.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-slate-800 text-slate-300 hover:bg-slate-700 border-slate-700">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setShowBackConfirm(false);
+                setStep("dashboard");
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              OK
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Toaster position="bottom-right" theme="dark" />
     </div>
