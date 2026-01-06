@@ -92,7 +92,7 @@ export function EditorHelpPanel({ isOpen, onClose }: EditorHelpPanelProps) {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900">
               <div className="space-y-4">
                 {HELP_ITEMS.map((item, index) => (
                   <motion.div
