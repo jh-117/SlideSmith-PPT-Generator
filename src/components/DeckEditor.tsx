@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { Deck, Slide } from "../lib/types";
 import { SlidePreview } from "./SlidePreview";
 import { SlideEditorPanel } from "./SlideEditorPanel";
-import { EditorHelpPanel } from "./EditorHelpPanel";
 import { Button } from "./ui/button";
-import { Download, ChevronLeft, Save, History, Clock, HelpCircle } from "lucide-react";
+import { Download, ChevronLeft, Save, History, Clock } from "lucide-react";
 import { cn } from "../lib/utils";
 import {
   Select,
@@ -24,17 +23,16 @@ interface DeckEditorProps {
   onBack: () => void;
 }
 
-export function DeckEditor({
-  deck,
-  versions,
-  onSwitchVersion,
+export function DeckEditor({ 
+  deck, 
+  versions, 
+  onSwitchVersion, 
   onSaveVersion,
-  onUpdateDeck,
-  onExport,
-  onBack
+  onUpdateDeck, 
+  onExport, 
+  onBack 
 }: DeckEditorProps) {
   const [activeSlideId, setActiveSlideId] = useState<string>("");
-  const [showHelp, setShowHelp] = useState<boolean>(false);
 
   // Update active slide if deck changes (e.g. version switch) or on init
   useEffect(() => {
@@ -81,16 +79,6 @@ export function DeckEditor({
         </div>
 
         <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowHelp(true)}
-            className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10"
-            title="Show help"
-          >
-            <HelpCircle className="w-4 h-4" />
-          </Button>
-
           {/* Version Control */}
           <div className="flex items-center gap-2 mr-4 bg-slate-950 rounded-md p-1 border border-slate-800">
              <History className="w-4 h-4 ml-2 text-slate-500" />
@@ -106,9 +94,9 @@ export function DeckEditor({
                 ))}
               </SelectContent>
             </Select>
-            <Button
-              size="sm"
-              variant="ghost"
+            <Button 
+              size="sm" 
+              variant="ghost" 
               onClick={onSaveVersion}
               className="h-8 w-8 p-0 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10"
               title="Save as new version"
@@ -117,7 +105,7 @@ export function DeckEditor({
             </Button>
           </div>
 
-           <Button
+           <Button 
             onClick={onExport}
             className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/20 border-0"
           >
@@ -183,8 +171,6 @@ export function DeckEditor({
         )}
 
       </div>
-
-      <EditorHelpPanel isOpen={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   );
 }

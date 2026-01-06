@@ -1,92 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Hero } from "./components/Hero";
-import { BriefFormImproved } from "./components/BriefFormImproved";
+import { BriefForm } from "./components/BriefForm";
 import { LoadingState } from "./components/LoadingState";
 import { DeckEditor } from "./components/DeckEditor";
-import { Dashboard } from "./components/Dashboard";
-import { ExampleGallery } from "./components/ExampleGallery";
-import { OnboardingTour } from "./components/OnboardingTour";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import { Brief, Deck } from "./lib/types";
 import { generateDeck } from "./lib/openai";
 import { exportDeck } from "./lib/pptxGenerator";
-import { savePresentation, loadPresentation, saveNewVersion, updatePresentation } from "./lib/database";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./components/ui/alert-dialog";
 
-type Step = "dashboard" | "landing" | "brief" | "generating" | "editor" | "privacy-policy" | "examples";
+type Step = "landing" | "brief" | "generating" | "editor" | "privacy-policy";
 
 export default function App() {
-  const [step, setStep] = useState<Step>("dashboard");
-  const [previousStep, setPreviousStep] = useState<Step>("dashboard");
+  const [step, setStep] = useState<Step>("landing");
+  const [previousStep, setPreviousStep] = useState<Step>("landing");
   const [brief, setBrief] = useState<Brief | null>(null);
   const [versions, setVersions] = useState<Deck[]>([]);
   const [currentDeckId, setCurrentDeckId] = useState<string | null>(null);
-  const [currentPresentationId, setCurrentPresentationId] = useState<string | null>(null);
-  const [showOnboarding, setShowOnboarding] = useState<boolean>(false);
-  const [showBackConfirm, setShowBackConfirm] = useState<boolean>(false);
 
   const currentDeck = versions.find(d => d.id === currentDeckId) || null;
 
-  useEffect(() => {
-    const hasSeenOnboarding = localStorage.getItem('slidesmith_onboarding_completed');
-    if (!hasSeenOnboarding && step === "landing") {
-      setShowOnboarding(true);
-    }
-  }, [step]);
-
-  const handleOnboardingComplete = () => {
-    localStorage.setItem('slidesmith_onboarding_completed', 'true');
-    setShowOnboarding(false);
-  };
-
-  const handleOnboardingSkip = () => {
-    localStorage.setItem('slidesmith_onboarding_completed', 'true');
-    setShowOnboarding(false);
-  };
-
   const handleStart = () => {
     setStep("brief");
-    setCurrentPresentationId(null);
-    setBrief(null);
-  };
-
-  const handleCreateNew = () => {
-    setStep("landing");
-    setCurrentPresentationId(null);
-    setBrief(null);
-    setVersions([]);
-    setCurrentDeckId(null);
-  };
-
-  const handleOpenPresentation = async (presentationId: string) => {
-    try {
-      toast.loading('Loading presentation...');
-      const { brief: loadedBrief, deck, versions: loadedVersions } = await loadPresentation(presentationId);
-
-      setBrief(loadedBrief);
-      setVersions(loadedVersions);
-      setCurrentDeckId(deck.id);
-      setCurrentPresentationId(presentationId);
-      setStep("editor");
-
-      toast.dismiss();
-      toast.success('Presentation loaded');
-    } catch (error) {
-      console.error("Failed to load presentation", error);
-      toast.dismiss();
-      toast.error("Failed to load presentation");
-    }
   };
 
   const handlePrivacyPolicyClick = () => {
@@ -99,32 +35,18 @@ export default function App() {
   };
 
   const handleHomeClick = () => {
-    setStep("dashboard");
-  };
-
-  const handleShowExamples = () => {
-    setStep("examples");
-  };
-
-  const handleSelectExample = (exampleBrief: Brief) => {
-    setBrief(exampleBrief);
-    setStep("brief");
+    setStep("landing");
   };
 
   const handleBriefSubmit = async (submittedBrief: Brief) => {
     setBrief(submittedBrief);
     setStep("generating");
-
+    
     try {
       const generatedDeck = await generateDeck(submittedBrief);
       setVersions([generatedDeck]);
       setCurrentDeckId(generatedDeck.id);
-
-      const presentationId = await savePresentation(submittedBrief, generatedDeck);
-      setCurrentPresentationId(presentationId);
-
       setStep("editor");
-      toast.success("Presentation created successfully!");
     } catch (error) {
       console.error("Failed to generate deck", error);
       toast.error("Failed to generate deck. Please try again.");
@@ -132,43 +54,28 @@ export default function App() {
     }
   };
 
-  const handleUpdateDeck = async (updatedDeck: Deck) => {
+  const handleUpdateDeck = (updatedDeck: Deck) => {
     setVersions(prev => prev.map(d => d.id === updatedDeck.id ? updatedDeck : d));
-
-    if (currentPresentationId && brief) {
-      try {
-        await updatePresentation(currentPresentationId, brief);
-      } catch (error) {
-        console.error("Auto-save failed", error);
-      }
-    }
   };
 
-  const handleSaveVersion = async () => {
-    if (!currentDeck || !currentPresentationId) return;
-
-    try {
-      const newVersion: Deck = {
-        ...currentDeck,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        slides: currentDeck.slides.map(s => ({ ...s, bullets: [...s.bullets] }))
-      };
-
-      setVersions(prev => [...prev, newVersion]);
-      setCurrentDeckId(newVersion.id);
-
-      await saveNewVersion(currentPresentationId, newVersion);
-      toast.success("New version saved!");
-    } catch (error) {
-      console.error("Failed to save version", error);
-      toast.error("Failed to save version");
-    }
+  const handleSaveVersion = () => {
+    if (!currentDeck) return;
+    
+    const newVersion: Deck = {
+      ...currentDeck,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      slides: currentDeck.slides.map(s => ({ ...s, bullets: [...s.bullets] }))
+    };
+    
+    setVersions(prev => [...prev, newVersion]);
+    setCurrentDeckId(newVersion.id);
+    toast.success("New version saved!");
   };
 
   const handleExport = async () => {
     if (!currentDeck) return;
-
+    
     const promise = exportDeck(currentDeck);
     toast.promise(promise, {
       loading: 'Preparing PowerPoint file...',
@@ -177,10 +84,11 @@ export default function App() {
     });
   };
 
+  // Show Privacy Policy
   if (step === "privacy-policy") {
     return (
       <>
-        <PrivacyPolicy
+        <PrivacyPolicy 
           onBack={handlePrivacyPolicyBack}
           onHomeClick={handleHomeClick}
         />
@@ -189,50 +97,17 @@ export default function App() {
     );
   }
 
-  if (step === "dashboard") {
-    return (
-      <>
-        <Dashboard
-          onCreateNew={handleCreateNew}
-          onOpenPresentation={handleOpenPresentation}
-          onPrivacyPolicyClick={handlePrivacyPolicyClick}
-        />
-        <Toaster position="bottom-right" theme="dark" />
-      </>
-    );
-  }
-
-  if (step === "examples") {
-    return (
-      <>
-        <ExampleGallery
-          onSelectExample={handleSelectExample}
-          onClose={() => setStep("landing")}
-        />
-        <Toaster position="bottom-right" theme="dark" />
-      </>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background font-sans text-foreground antialiased selection:bg-blue-500/30">
-      {showOnboarding && (
-        <OnboardingTour
-          onComplete={handleOnboardingComplete}
-          onSkip={handleOnboardingSkip}
-        />
-      )}
-
       {step === "landing" && (
-        <Hero
+        <Hero 
           onStart={handleStart}
           onPrivacyPolicyClick={handlePrivacyPolicyClick}
-          onShowExamples={handleShowExamples}
         />
       )}
 
       {step === "brief" && (
-        <BriefFormImproved
+        <BriefForm
           onBack={() => setStep("landing")}
           onSubmit={handleBriefSubmit}
           isLoading={false}
@@ -252,34 +127,21 @@ export default function App() {
           onSaveVersion={handleSaveVersion}
           onUpdateDeck={handleUpdateDeck}
           onExport={handleExport}
-          onBack={() => setShowBackConfirm(true)}
+          onBack={() => {
+            toast.warning("Unsaved changes will be lost", {
+              action: {
+                label: "Leave",
+                onClick: () => setStep("brief"),
+              },
+              cancel: {
+                label: "Stay",
+                onClick: () => { },
+              },
+              duration: 10000,
+            });
+          }}
         />
       )}
-
-      <AlertDialog open={showBackConfirm} onOpenChange={setShowBackConfirm}>
-        <AlertDialogContent className="bg-slate-900 border-slate-700">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-white">Return to dashboard?</AlertDialogTitle>
-            <AlertDialogDescription className="text-slate-400">
-              Your work is auto-saved. You can come back anytime to continue editing.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="bg-slate-800 text-slate-300 hover:bg-slate-700 border-slate-700">
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                setShowBackConfirm(false);
-                setStep("dashboard");
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              OK
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
 
       <Toaster position="bottom-right" theme="dark" />
     </div>
