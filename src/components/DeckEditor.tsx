@@ -3,7 +3,7 @@ import { Deck, Slide } from "../lib/types";
 import { SlidePreview } from "./SlidePreview";
 import { SlideEditorPanel } from "./SlideEditorPanel";
 import { Button } from "./ui/button";
-import { Download, ChevronLeft, Save, History, Clock } from "lucide-react";
+import { Download, ChevronLeft, Save, History, Clock, PanelLeftClose, PanelLeft } from "lucide-react";
 import { cn } from "../lib/utils";
 import {
   Select,
@@ -23,16 +23,17 @@ interface DeckEditorProps {
   onBack: () => void;
 }
 
-export function DeckEditor({ 
-  deck, 
-  versions, 
-  onSwitchVersion, 
+export function DeckEditor({
+  deck,
+  versions,
+  onSwitchVersion,
   onSaveVersion,
-  onUpdateDeck, 
-  onExport, 
-  onBack 
+  onUpdateDeck,
+  onExport,
+  onBack
 }: DeckEditorProps) {
   const [activeSlideId, setActiveSlideId] = useState<string>("");
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
 
   // Update active slide if deck changes (e.g. version switch) or on init
   useEffect(() => {
@@ -65,9 +66,25 @@ export function DeckEditor({
           <Button variant="ghost" size="sm" onClick={onBack} className="text-slate-400 hover:text-white hover:bg-slate-800">
             <ChevronLeft className="mr-1 h-4 w-4" /> Start Over
           </Button>
-          
+
           <div className="h-8 w-px bg-slate-800" />
-          
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="text-slate-400 hover:text-white hover:bg-slate-800"
+            title={isSidebarCollapsed ? "Show slide deck" : "Hide slide deck"}
+          >
+            {isSidebarCollapsed ? (
+              <PanelLeft className="h-4 w-4" />
+            ) : (
+              <PanelLeftClose className="h-4 w-4" />
+            )}
+          </Button>
+
+          <div className="h-8 w-px bg-slate-800" />
+
           <div>
             <h1 className="font-semibold text-base text-slate-100">
               {deck.topic}
@@ -116,40 +133,50 @@ export function DeckEditor({
 
       {/* Main Workspace */}
       <div className="flex flex-1 overflow-hidden">
-        
+
         {/* Left Sidebar: Slide Thumbnails */}
-        <div className="w-72 bg-[#0a0c10] border-r border-slate-800 flex flex-col overflow-y-auto custom-scrollbar">
-          <div className="p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50 mb-2">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Slide Deck</h3>
-          </div>
-          <div className="px-4 pb-4 space-y-4">
-            {deck.slides.map((slide, index) => (
-              <div 
-                key={slide.id}
-                onClick={() => setActiveSlideId(slide.id)}
-                className={cn(
-                  "group relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200",
-                  (activeSlideId === slide.id || (!activeSlideId && index === 0))
-                    ? "border-blue-500 ring-4 ring-blue-500/10 scale-[1.02]" 
-                    : "border-slate-800 hover:border-slate-600 opacity-70 hover:opacity-100"
-                )}
-              >
-                {/* Thumbnail Scaled Down */}
-                <div className="pointer-events-none origin-top-left transform scale-[0.22]" style={{ width: '960px', height: '540px', marginBottom: '-421px' }}>
-                  <SlidePreview slide={slide} />
+        <div
+          className={cn(
+            "bg-[#0a0c10] border-r border-slate-800 flex flex-col overflow-y-auto custom-scrollbar transition-all duration-300 ease-in-out",
+            isSidebarCollapsed ? "w-0 border-r-0" : "w-72"
+          )}
+        >
+          <div className={cn(
+            "transition-opacity duration-300",
+            isSidebarCollapsed ? "opacity-0" : "opacity-100"
+          )}>
+            <div className="p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50 mb-2">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Slide Deck</h3>
+            </div>
+            <div className="px-4 pb-4 space-y-4">
+              {deck.slides.map((slide, index) => (
+                <div
+                  key={slide.id}
+                  onClick={() => setActiveSlideId(slide.id)}
+                  className={cn(
+                    "group relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200",
+                    (activeSlideId === slide.id || (!activeSlideId && index === 0))
+                      ? "border-blue-500 ring-4 ring-blue-500/10 scale-[1.02]"
+                      : "border-slate-800 hover:border-slate-600 opacity-70 hover:opacity-100"
+                  )}
+                >
+                  {/* Thumbnail Scaled Down */}
+                  <div className="pointer-events-none origin-top-left transform scale-[0.22]" style={{ width: '960px', height: '540px', marginBottom: '-421px' }}>
+                    <SlidePreview slide={slide} />
+                  </div>
+
+                  {/* Overlay Number */}
+                  <div className={cn(
+                    "absolute bottom-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur transition-colors",
+                    (activeSlideId === slide.id || (!activeSlideId && index === 0))
+                      ? "bg-blue-600 text-white"
+                      : "bg-black/60 text-slate-300"
+                  )}>
+                    {index + 1}
+                  </div>
                 </div>
-                
-                {/* Overlay Number */}
-                <div className={cn(
-                  "absolute bottom-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur transition-colors",
-                  (activeSlideId === slide.id || (!activeSlideId && index === 0))
-                    ? "bg-blue-600 text-white"
-                    : "bg-black/60 text-slate-300"
-                )}>
-                  {index + 1}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
