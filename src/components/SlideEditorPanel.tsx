@@ -108,12 +108,11 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
   };
 
   return (
-    <aside className="w-80 flex-shrink-0 bg-slate-900 border-l border-slate-800 flex flex-col overflow-hidden">
-      <div className="p-6 flex flex-col gap-6 overflow-y-auto custom-scrollbar">
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-1">Edit Slide</h3>
-          <p className="text-xs text-slate-500">Customize content and visuals</p>
-        </div>
+    <div className="w-80 bg-slate-900 border-l border-slate-800 p-6 flex flex-col gap-6 overflow-y-auto h-full">
+      <div>
+        <h3 className="text-lg font-semibold text-white mb-1">Edit Slide</h3>
+        <p className="text-xs text-slate-500">Customize content and visuals</p>
+      </div>
 
       <div className="space-y-3">
         <Label htmlFor="slide-title">Title</Label>
@@ -194,7 +193,6 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
           </p>
         </div>
       </div>
-      </div>
-    </aside>
+    </div>
   );
 }
