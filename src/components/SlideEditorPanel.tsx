@@ -108,7 +108,8 @@ export function SlideEditorPanel({ slide, onUpdate }: SlideEditorPanelProps) {
   };
 
   return (
-    <div className="w-80 bg-slate-900 border-l border-slate-800 p-6 flex flex-col gap-6 overflow-y-auto h-full">
+   <div className="w-80 flex-shrink-0 bg-slate-900 border-l border-slate-800 p-6 flex flex-col gap-6 overflow-y-auto h-full">
+
       <div>
         <h3 className="text-lg font-semibold text-white mb-1">Edit Slide</h3>
         <p className="text-xs text-slate-500">Customize content and visuals</p>
