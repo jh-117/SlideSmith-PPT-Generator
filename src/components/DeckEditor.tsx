@@ -137,13 +137,15 @@ export function DeckEditor({
         {/* Left Sidebar: Slide Thumbnails */}
         <div
           className={cn(
-            "bg-[#0a0c10] border-r border-slate-800 flex flex-col overflow-y-auto custom-scrollbar transition-all duration-300 ease-in-out",
-            isSidebarCollapsed ? "w-0 border-r-0" : "w-72"
+            "bg-[#0a0c10] border-r border-slate-800 flex flex-col transition-all duration-300 ease-in-out flex-shrink-0",
+            isSidebarCollapsed
+              ? "w-0 border-r-0 overflow-hidden"
+              : "w-72 overflow-y-auto custom-scrollbar"
           )}
         >
           <div className={cn(
-            "transition-opacity duration-300",
-            isSidebarCollapsed ? "opacity-0" : "opacity-100"
+            "transition-opacity duration-300 min-w-72",
+            isSidebarCollapsed ? "opacity-0 pointer-events-none" : "opacity-100"
           )}>
             <div className="p-4 sticky top-0 bg-[#0a0c10] z-10 border-b border-slate-800/50 mb-2">
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Slide Deck</h3>
