@@ -43,7 +43,7 @@ export function Hero({ onStart, onPrivacyPolicyClick }: HeroProps) {
             </h1>
             
             <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              AI-powered executive slide deck creator — from brief to full PPTX with visuals in minutes.
+              Instantly generate executive slide decks. From brief to polished PPTX—complete with text and visuals.
             </p>
           </motion.div>
           
