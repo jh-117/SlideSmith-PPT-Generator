@@ -92,6 +92,6 @@ export function Hero({ onStart, onPrivacyPolicyClick }: HeroProps) {
           </div>
         </div>
       </footer>
-    </div>
+    
   );
 }
