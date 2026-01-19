@@ -79,9 +79,23 @@ export function Hero({ onStart, onPrivacyPolicyClick }: HeroProps) {
         </div>
       </div>
 
-      {/* Footer - Only on Hero Page */}
-      <footer className="relative z-10 bg-[#0f111a] border-t border-slate-800">
-       <div className="flex items-center justify-center text-gray-400 text-sm gap-3">
+      {/* Footer - Updated to match correct example */}
+      <footer className="bg-[#0f111a] border-t border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col items-center justify-center space-y-6 mb-6">
+            {/* Privacy Policy Link */}
+            <div className="text-center">
+              <button
+                onClick={onPrivacyPolicyClick}
+                className="text-gray-400 hover:text-blue-400 font-medium transition-colors text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded px-2 py-1"
+              >
+                Privacy Policy
+              </button>
+            </div>
+          </div>
+
+          {/* Copyright Footer Row */}
+          <div className="flex items-center justify-center text-gray-500 text-sm gap-3">
             <span>Copyright © {new Date().getFullYear()}</span>
             <img
               src={kadoshLogo}
@@ -92,6 +106,6 @@ export function Hero({ onStart, onPrivacyPolicyClick }: HeroProps) {
           </div>
         </div>
       </footer>
-    
+    </div>
   );
 }
