@@ -81,30 +81,14 @@ export function Hero({ onStart, onPrivacyPolicyClick }: HeroProps) {
 
       {/* Footer - Only on Hero Page */}
       <footer className="relative z-10 bg-[#0f111a] border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            {/* Copyright Left */}
-            <p className="text-sm text-slate-500">
-              Copyright © 2026
-            </p>
-
-            {/* Logo Center */}
-            <div className="flex items-center gap-2">
-              <img
-                src={kadoshLogo}
-                alt="Kadosh AI"
-                className="h-6 w-6 object-contain"
-              />
-              <span className="text-sm font-medium">
-                <span className="text-white">Kadosh</span>{" "}
-                <span className="text-green-500">AI</span>
-              </span>
-            </div>
-
-            {/* Rights Reserved Right */}
-            <p className="text-sm text-slate-500">
-              All rights reserved
-            </p>
+       <div className="flex items-center justify-center text-gray-400 text-sm gap-3">
+            <span>Copyright © {new Date().getFullYear()}</span>
+            <img
+              src={kadoshLogo}
+              alt="Kadosh AI"
+              className="h-5 w-auto object-contain"
+            />
+            <span>All rights reserved</span>
           </div>
         </div>
       </footer>
