@@ -81,32 +81,29 @@ export function Hero({ onStart, onPrivacyPolicyClick }: HeroProps) {
 
       {/* Footer - Only on Hero Page */}
       <footer className="relative z-10 bg-[#0f111a] border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col items-center justify-center space-y-6">
-            
-            {/* Privacy Policy Link */}
-            <div className="text-center">
-              <button
-                onClick={onPrivacyPolicyClick}
-                className="text-slate-400 hover:text-blue-400 font-medium transition-colors text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded px-3 py-1.5"
-              >
-                Privacy Policy
-              </button>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            {/* Copyright Left */}
+            <p className="text-sm text-slate-500">
+              Copyright © 2026
+            </p>
 
-            {/* Powered By Section */}
-            <div className="flex flex-col items-center space-y-2">
-              <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Powered by</p>
+            {/* Logo Center */}
+            <div className="flex items-center gap-2">
               <img
                 src={kadoshLogo}
                 alt="Kadosh AI"
-                className="h-8 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity"
+                className="h-6 w-6 object-contain"
               />
+              <span className="text-sm font-medium">
+                <span className="text-white">Kadosh</span>{" "}
+                <span className="text-green-500">AI</span>
+              </span>
             </div>
 
-            {/* Copyright */}
+            {/* Rights Reserved Right */}
             <p className="text-sm text-slate-500">
-              © {new Date().getFullYear()} SlideSmith AI. All rights reserved.
+              All rights reserved
             </p>
           </div>
         </div>
